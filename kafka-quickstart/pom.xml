@@ -12,6 +12,7 @@
     <maven.javadoc.skip>true</maven.javadoc.skip>
   </properties>
   <modules>
+    <module>gen</module>
     <module>sub</module>
     <module>pub</module>
   </modules>

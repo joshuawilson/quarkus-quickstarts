@@ -8,6 +8,8 @@ import javax.enterprise.context.ApplicationScoped;
 import io.smallrye.mutiny.Multi;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 
+import io.smallrye.reactive.messaging.annotations.Broadcast;
+
 /**
  * A bean producing random prices every 5 seconds.
  * The prices are written to a Kafka topic (prices). The Kafka configuration is specified in the application configuration.
