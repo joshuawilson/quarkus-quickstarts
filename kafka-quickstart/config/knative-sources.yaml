@@ -1,93 +1,43 @@
-# apiVersion: sources.knative.dev/v1beta1
-# kind: KafkaSource
-# metadata:
-#   name: kafka-source-prices-broker-source
-#   namespace: knative-kafka-quarkus-example
-# spec:
-#   bootstrapServers:
-#     - my-cluster-kafka-bootstrap.kafka:9092
-#   topics:
-#     - my-data-stream
-#   sink:
-#     ref:
-#       apiVersion: eventing.knative.dev/v1
-#       kind: Broker
-#       name: default
-
-# ---
-# apiVersion: eventing.knative.dev/v1
-# kind: Trigger
-# metadata:
-#   name: prices-gen-trigger
-#   namespace: knative-kafka-quarkus-example
-# spec:
-#   broker: default
-#   subscriber:
-#     ref:
-#       apiVersion: serving.knative.dev/v1
-#       kind: Service
-#       name: prices-gen
-#     uri: /prices
-
-
-# ---
-# apiVersion: bindings.knative.dev/v1beta1
-# kind: KafkaBinding
-# metadata:
-#   name: kafka-binding-prices-gen
-#   namespace: knative-kafka-quarkus-example
-# spec:
-#   subject:
-#     apiVersion: serving.knative.dev/v1
-#     kind: Service
-#     name: prices-gen
-#   bootstrapServers:
-#     - my-cluster-kafka-bootstrap.kafka:9092
-# ---
-# apiVersion: bindings.knative.dev/v1beta1
-# kind: KafkaBinding
-# metadata:
-#   name: kafka-binding-prices-pub
-#   namespace: knative-kafka-quarkus-example
-# spec:
-#   subject:
-#     apiVersion: serving.knative.dev/v1
-#     kind: Service
-#     name: prices-pub
-#   bootstrapServers:
-#     - my-cluster-kafka-bootstrap.kafka:9092
-# ---
-# apiVersion: bindings.knative.dev/v1beta1
-# kind: KafkaBinding
-# metadata:
-#   name: kafka-binding-prices-sub
-#   namespace: knative-kafka-quarkus-example
-# spec:
-#   subject:
-#     apiVersion: serving.knative.dev/v1
-#     kind: Service
-#     name: prices-sub
-#   bootstrapServers:
-#     - my-cluster-kafka-bootstrap.kafka:9092
-
-
----
-apiVersion: sources.knative.dev/v1beta1
-kind: KafkaSource
+apiVersion: bindings.knative.dev/v1beta1
+kind: KafkaBinding
 metadata:
-  name: kafka-source-prices-gen-data
+  name: kafka-binding-prices-gen
   namespace: knative-kafka-quarkus-example
 spec:
+  subject:
+    apiVersion: serving.knative.dev/v1
+    kind: Service
+    name: prices-gen
   bootstrapServers:
-  - my-cluster-kafka-bootstrap.kafka:9092
-  topics:
-  - prices
-  sink:
-    ref:
-      apiVersion: serving.knative.dev/v1
-      kind: Service
-      name: prices-gen
-    uri: /memory
+    - my-cluster-kafka-bootstrap.kafka:9092
+---
+apiVersion: bindings.knative.dev/v1beta1
+kind: KafkaBinding
+metadata:
+  name: kafka-binding-prices-pub
+  namespace: knative-kafka-quarkus-example
+spec:
+  subject:
+    apiVersion: serving.knative.dev/v1
+    kind: Service
+    name: prices-pub
+  bootstrapServers:
+    - my-cluster-kafka-bootstrap.kafka:9092
+---
+apiVersion: bindings.knative.dev/v1beta1
+kind: KafkaBinding
+metadata:
+  name: kafka-binding-prices-sub
+  namespace: knative-kafka-quarkus-example
+spec:
+  subject:
+    apiVersion: serving.knative.dev/v1
+    kind: Service
+    name: prices-sub
+  bootstrapServers:
+    - my-cluster-kafka-bootstrap.kafka:9092
+
+
 ---
 apiVersion: sources.knative.dev/v1beta1
 kind: KafkaSource
@@ -98,35 +48,18 @@ spec:
   bootstrapServers:
   - my-cluster-kafka-bootstrap.kafka:9092
   topics:
-  - prices
+  - generated-price
   sink:
     ref:
       apiVersion: serving.knative.dev/v1
       kind: Service
       name: prices-pub
-    uri: /memory
+    # uri: /process
 ---
 apiVersion: sources.knative.dev/v1beta1
 kind: KafkaSource
 metadata:
-  name: kafka-source-prices-pub-data
-  namespace: knative-kafka-quarkus-example
-spec:
-  bootstrapServers:
-  - my-cluster-kafka-bootstrap.kafka:9092
-  topics:
-  - my-data-stream
-  sink:
-    ref:
-      apiVersion: serving.knative.dev/v1
-      kind: Service
-      name: prices-pub
-    uri: /prices
----
-apiVersion: sources.knative.dev/v1beta1
-kind: KafkaSource
-metadata:
-  name: kafka-source-prices-sub-data
+  name: kafka-source-prices-sub
   namespace: knative-kafka-quarkus-example
 spec:
   bootstrapServers:
@@ -138,5 +71,23 @@ spec:
       apiVersion: serving.knative.dev/v1
       kind: Service
       name: prices-sub
-    uri: /prices
+    # uri: /prices
+---
+# This one is not needed for topics but as it sends to the first, it keeps them from shutting down.
+apiVersion: sources.knative.dev/v1beta1
+kind: KafkaSource
+metadata:
+  name: kafka-source-prices-gen
+  namespace: knative-kafka-quarkus-example
+spec:
+  bootstrapServers:
+  - my-cluster-kafka-bootstrap.kafka:9092
+  topics:
+  - my-data-stream
+  sink:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: prices-gen
+    # uri: /prices
 ---

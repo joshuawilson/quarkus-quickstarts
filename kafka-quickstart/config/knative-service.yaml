@@ -1,14 +1,14 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  labels:
-    app: knative-kafka-quarkus-example-app
+  # labels:
+  #   app: knative-kafka-quarkus-example-app
   name: prices-gen
   namespace: knative-kafka-quarkus-example
 spec:
   template:
     spec:
-      containerConcurrency: 0
+      # containerConcurrency: 0
       containers:
         - image: image-registry.openshift-image-registry.svc:5000/knative-kafka-quarkus-example/knative-kafka-quarkus-prices-gen:1.0.0-SNAPSHOT
   #         name: user-container
@@ -37,14 +37,14 @@ spec:
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  labels:
-    app: knative-kafka-quarkus-example-app
+  # labels:
+  #   app: knative-kafka-quarkus-example-app
   name: prices-pub
   namespace: knative-kafka-quarkus-example
 spec:
   template:
     spec:
-      containerConcurrency: 0
+      # containerConcurrency: 0
       containers:
         - image: image-registry.openshift-image-registry.svc:5000/knative-kafka-quarkus-example/knative-kafka-quarkus-prices-pub:1.0.0-SNAPSHOT
           # name: user-container
@@ -73,14 +73,14 @@ spec:
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  labels:
-    app: knative-kafka-quarkus-example-app
+  # labels:
+  #   app: knative-kafka-quarkus-example-app
   name: prices-sub
   namespace: knative-kafka-quarkus-example
 spec:
   template:
     spec:
-      containerConcurrency: 0
+      # containerConcurrency: 0
       containers:
         - image: image-registry.openshift-image-registry.svc:5000/knative-kafka-quarkus-example/knative-kafka-quarkus-prices-sub:1.0.0-SNAPSHOT
           # name: user-container
