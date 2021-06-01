@@ -1,0 +1,29 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: event-display
+  namespace: knative-kafka-quarkus-example
+spec:
+  template:
+    spec:
+      containers:
+        - # This corresponds to
+          # https://github.com/knative/eventing-contrib/tree/main/cmd/event_display/main.go
+          image: gcr.io/knative-releases/knative.dev/eventing-contrib/cmd/event_display
+---
+apiVersion: sources.knative.dev/v1beta1
+kind: KafkaSource
+metadata:
+  name: kafka-source-eventing-display
+  namespace: knative-kafka-quarkus-example
+spec:
+  consumerGroup: knative-group
+  bootstrapServers:
+  - my-cluster-kafka-bootstrap.kafka:9092 # note the kafka namespace
+  topics:
+  - prices
+  sink:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: event-display

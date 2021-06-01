@@ -1,19 +1,19 @@
-apiVersion: kafka.strimzi.io/v1beta1
+apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaTopic
 metadata:
-  name: generated-price
-  namespace: knative-kafka-quarkus-example
+  name: prices
+  namespace: kafka
   labels:
     strimzi.io/cluster: my-cluster
 spec:
   partitions: 100
   replicas: 1
 ---
-apiVersion: kafka.strimzi.io/v1beta1
+apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaTopic
 metadata:
-  name: my-data-stream
-  namespace: knative-kafka-quarkus-example
+  name: data
+  namespace: kafka
   labels:
     strimzi.io/cluster: my-cluster
 spec:

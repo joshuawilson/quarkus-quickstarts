@@ -1,50 +1,10 @@
-apiVersion: bindings.knative.dev/v1beta1
-kind: KafkaBinding
-metadata:
-  name: kafka-binding-prices-gen
-  namespace: knative-kafka-quarkus-example
-spec:
-  subject:
-    apiVersion: serving.knative.dev/v1
-    kind: Service
-    name: prices-gen
-  bootstrapServers:
-    - my-cluster-kafka-bootstrap.kafka:9092
----
-apiVersion: bindings.knative.dev/v1beta1
-kind: KafkaBinding
-metadata:
-  name: kafka-binding-prices-pub
-  namespace: knative-kafka-quarkus-example
-spec:
-  subject:
-    apiVersion: serving.knative.dev/v1
-    kind: Service
-    name: prices-pub
-  bootstrapServers:
-    - my-cluster-kafka-bootstrap.kafka:9092
----
-apiVersion: bindings.knative.dev/v1beta1
-kind: KafkaBinding
-metadata:
-  name: kafka-binding-prices-sub
-  namespace: knative-kafka-quarkus-example
-spec:
-  subject:
-    apiVersion: serving.knative.dev/v1
-    kind: Service
-    name: prices-sub
-  bootstrapServers:
-    - my-cluster-kafka-bootstrap.kafka:9092
-
-
----
 apiVersion: sources.knative.dev/v1beta1
 kind: KafkaSource
 metadata:
-  name: kafka-source-prices-pub
+  name: ks-prices-pub
   namespace: knative-kafka-quarkus-example
 spec:
+  # consumerGroup: knative-group
   bootstrapServers:
   - my-cluster-kafka-bootstrap.kafka:9092
   topics:
@@ -59,9 +19,10 @@ spec:
 apiVersion: sources.knative.dev/v1beta1
 kind: KafkaSource
 metadata:
-  name: kafka-source-prices-sub
+  name: ks-prices-sub
   namespace: knative-kafka-quarkus-example
 spec:
+  # consumerGroup: knative-group
   bootstrapServers:
   - my-cluster-kafka-bootstrap.kafka:9092
   topics:
@@ -77,13 +38,14 @@ spec:
 apiVersion: sources.knative.dev/v1beta1
 kind: KafkaSource
 metadata:
-  name: kafka-source-prices-gen
+  name: ks-prices-gen
   namespace: knative-kafka-quarkus-example
 spec:
+  # consumerGroup: knative-group
   bootstrapServers:
   - my-cluster-kafka-bootstrap.kafka:9092
   topics:
-  - my-data-stream
+  - prices
   sink:
     ref:
       apiVersion: serving.knative.dev/v1

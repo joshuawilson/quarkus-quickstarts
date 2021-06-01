@@ -1,0 +1,38 @@
+apiVersion: bindings.knative.dev/v1beta1
+kind: KafkaBinding
+metadata:
+  name: kb-prices-gen
+  namespace: knative-kafka-quarkus-example
+spec:
+  subject:
+    apiVersion: serving.knative.dev/v1
+    kind: Service
+    name: prices-gen
+  bootstrapServers:
+    - my-cluster-kafka-bootstrap.kafka:9092
+---
+apiVersion: bindings.knative.dev/v1beta1
+kind: KafkaBinding
+metadata:
+  name: kb-prices-pub
+  namespace: knative-kafka-quarkus-example
+spec:
+  subject:
+    apiVersion: serving.knative.dev/v1
+    kind: Service
+    name: prices-pub
+  bootstrapServers:
+    - my-cluster-kafka-bootstrap.kafka:9092
+---
+apiVersion: bindings.knative.dev/v1beta1
+kind: KafkaBinding
+metadata:
+  name: kb-prices-sub
+  namespace: knative-kafka-quarkus-example
+spec:
+  subject:
+    apiVersion: serving.knative.dev/v1
+    kind: Service
+    name: prices-sub
+  bootstrapServers:
+    - my-cluster-kafka-bootstrap.kafka:9092

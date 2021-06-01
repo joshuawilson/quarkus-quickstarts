@@ -1,3 +1,23 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   # labels:
+#   #   app: knative-kafka-quarkus-example-app
+#   name: prices-gen
+#   namespace: knative-kafka-quarkus-example
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels: &labels
+#       app: kn-quarkus-app
+#   template:
+#     metadata:
+#       labels: *labels
+#     spec:
+#       containers:
+#         - name: prices-gen
+#           image: image-registry.openshift-image-registry.svc:5000/knative-kafka-quarkus-example/knative-kafka-quarkus-prices-gen:1.0.0-SNAPSHOT
+# ---
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
@@ -8,31 +28,8 @@ metadata:
 spec:
   template:
     spec:
-      # containerConcurrency: 0
       containers:
         - image: image-registry.openshift-image-registry.svc:5000/knative-kafka-quarkus-example/knative-kafka-quarkus-prices-gen:1.0.0-SNAPSHOT
-  #         name: user-container
-  #         env:
-  #           - name: BOOTSTRAP_SERVERS
-  #             value: my-cluster-kafka-bootstrap.kafka:9092
-  #           - name: TOPIC
-  #             value: generated-price
-  #           - name: DELAY_MS
-  #             value: "1000"
-  #           - name: LOG_LEVEL
-  #             value: "INFO"
-  #           - name: MESSAGE_COUNT
-  #             value: "1000000"
-  #         readinessProbe:
-  #           successThreshold: 1
-  #           tcpSocket:
-  #             port: 0
-  #         resources: {}
-  #     enableServiceLinks: false
-  #     timeoutSeconds: 500
-  # traffic:
-  #   - latestRevision: true
-  #     percent: 100
 ---
 apiVersion: serving.knative.dev/v1
 kind: Service
@@ -44,31 +41,8 @@ metadata:
 spec:
   template:
     spec:
-      # containerConcurrency: 0
       containers:
         - image: image-registry.openshift-image-registry.svc:5000/knative-kafka-quarkus-example/knative-kafka-quarkus-prices-pub:1.0.0-SNAPSHOT
-          # name: user-container
-          # env:
-          #   - name: BOOTSTRAP_SERVERS
-          #     value: my-cluster-kafka-bootstrap.kafka:9092
-          #   - name: TOPIC
-          #     value: prices
-          #   - name: DELAY_MS
-          #     value: "1000"
-          #   - name: LOG_LEVEL
-          #     value: "INFO"
-          #   - name: MESSAGE_COUNT
-          #     value: "1000000"
-  #         readinessProbe:
-  #           successThreshold: 1
-  #           tcpSocket:
-  #             port: 0
-  #         resources: {}
-  #     enableServiceLinks: false
-  #     timeoutSeconds: 500
-  # traffic:
-  #   - latestRevision: true
-  #     percent: 100
 ---
 apiVersion: serving.knative.dev/v1
 kind: Service
@@ -89,6 +63,8 @@ spec:
           #     value: my-cluster-kafka-bootstrap.kafka:9092
           #   - name: TOPIC
           #     value: prices
+            # - name: KAFKA-TOPIC
+            #   value: my-data-stream
           #   - name: DELAY_MS
           #     value: "1000"
           #   - name: LOG_LEVEL
